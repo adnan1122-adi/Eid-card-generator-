@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Eid Mubarak Card Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 30px;
+    }
+    #cardCanvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      max-width: 100%;
+    }
+    #nameInput {
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Create Your Eid Mubarak Card</h1>
+  <p>Enter your name below, then click "Generate Card".</p>
+
+  <input type="text" id="nameInput" placeholder="Enter your name">
+  <button onclick="generateCard()">Generate Card</button>
+
+  <br><br>
+  <!-- Canvas dimensions set to 1167 x 1600 -->
+  <canvas id="cardCanvas" width="1167" height="1600"></canvas>
+  <br><br>
+
+  <button onclick="downloadCard()">Download Card</button>
+
+  <script>
+    function generateCard() {
+      const canvas = document.getElementById('cardCanvas');
+      const context = canvas.getContext('2d');
+      const name = document.getElementById('nameInput').value.trim();
+
+      if (!name) {
+        alert("Please enter your name!");
+        return;
+      }
+
+      // Load the background image (make sure the path is correct)
+      const background = new Image();
+      background.src = 'KTS.PNG'; // <-- Change to your actual image path
+
+      background.onload = function() {
+        // Clear the canvas before drawing
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the background image
+        context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+        // Set text style (black color, larger font size)
+        context.font = '80px Arial'; // Adjust size if needed
+        context.fillStyle = '#46423f'; // Black color
+        context.textAlign = 'center';
+
+        // Draw the input name at the desired position
+        context.fillText(name, canvas.width / 2, 1480); // Adjust the Y position
+
+        // Add a small delay to ensure the canvas is updated
+        setTimeout(() => {
+          document.getElementById("downloadButton").disabled = false;
+        }, 500);
+      };
+
+      background.onerror = function () {
+        alert("Error loading background image. Check the image path.");
+      };
+    }
+
+    function downloadCard() {
+      const canvas = document.getElementById('cardCanvas');
+      const link = document.createElement('a');
+
+      // Ensure the canvas is not empty
+      if (!canvas.toDataURL().includes("data:image")) {
+        alert("Please generate the card before downloading!");
+        return;
+      }
+
+      link.download = 'EidMubarakCard.png';
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
